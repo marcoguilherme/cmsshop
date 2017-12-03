@@ -16,7 +16,7 @@ db.once('open', function() {
 var app = express();
 
 app.get('/', (req, res)=>{
-    res.send('Ola Mundo');
+    res.render('index');
 });
 
 //View engine setup
