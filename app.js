@@ -3,6 +3,7 @@ var path = require('path');
 var config = require('./config/database');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var expressValidator = require('express-validator');
 var pages = require('./routes/pages.js');
 var adminPages = require('./routes/admin_pages.js');
 
@@ -37,7 +38,32 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   cookie: { secure: true }
-}))
+}));
+
+//Express Validator
+app.use(expressValidator({
+    errorFormatter: (param, msg, value) => {
+        var namespace = param.split('.')
+        , root = namespace.shift()
+        , formParam = root;
+        
+        while(namespace.length){
+            formParam += '[' + namespace.shift() + '+';
+        }
+        return {
+            param: formParam,
+            msg: msg,
+            value: value
+        }
+    }
+}));
+
+//Express messages
+app.use(require('connect-flash')());
+app.use(function (req, res, next) {
+  res.locals.messages = require('express-messages')(req, res);
+  next();
+});
 
 app.use('/', pages);
 app.use('/admin/pages', adminPages);
