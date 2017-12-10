@@ -5,7 +5,15 @@ var router = express.Router();
 var Page = require('../models/page');
 
 router.get('/', (req, res)=>{
-    res.render('index');
+    Page.find({})
+        .sort({
+            sorting:1
+        })
+        .exec((err, pages)=>{
+            res.render('admin/pages', {
+                pages: pages
+            })
+    })
 });
 
 router.get('/add-page', (req, res)=>{
@@ -54,14 +62,14 @@ router.post('/add-page', (req, res)=>{
                     title: title,
                     slug: slug,
                     content: content,
-                    sorting: 0
+                    sorting: 100
                 })
 
                 page.save((err)=>{
                     if(err) return console.log(err);
 
                     req.flash('success', 'Pagina adicionada')
-                    res.redirect('/admin/pages');
+                    res.redirect('/admin/add-page');
                 })
             }
         })
