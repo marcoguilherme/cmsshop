@@ -6,7 +6,7 @@
 
 <table class="table">
     <thead>
-        <tr>
+        <tr class="home" >
             <th>Titulo</th>
             <th>Editar</th>
             <th>Deletar</th>
@@ -14,7 +14,7 @@
     </thead>
     <tbody>
         <% pages.forEach((page)=>{ %>
-            <tr>
+            <tr id="id_<%= page._id %>" class="<%= page.slug %>" >
                 <td><%= page.title %></td>
                 <td><a href="/admin/pages/edit-page/<%= page.slug %>">Editar</a></td>
                 <% if(page.slug == "home"){ %>
@@ -26,5 +26,18 @@
         <% }); %>
     </tbody>
 </table>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script>
 
+    $('tbody').sortable({
+        items: "tr:not('.home')",
+        placeholder: "ui-state-hightlight",
+        update: () => {
+            var ids =  $('tbody').sortable("serialize");
+            var url = "/admin/pages/reorder-page";
+
+            $.post(url, ids);
+        }
+    })
+</script>
 <%- include('../_layouts/admin-footer') %>
