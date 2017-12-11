@@ -79,8 +79,6 @@ router.post('/add-page', (req, res)=>{
 
 router.post('/reorder-page', (req, res)=>{
 
-    console.log("Ok");
-   
     var ids  = req.body['id[]'];
     var count = 0;
 
@@ -95,8 +93,6 @@ router.post('/reorder-page', (req, res)=>{
                 page.save((err)=>{
                     if(err)
                         return console.log(err);
-
-                    console.log("ok");
                 })
 
             })
